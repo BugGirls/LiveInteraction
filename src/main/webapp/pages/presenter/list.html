@@ -1,0 +1,395 @@
+<!DOCTYPE html><html>
+    <head>
+        <meta charset="utf-8">
+        <title>河南广播电视台</title>
+        <link rel="stylesheet" href="/static/css/amazeui.min.css" />
+        <link rel="stylesheet" href="/static/css/admin.css">
+        <link rel="stylesheet" href="/static/css/app.css">
+        <link rel="stylesheet" href="/static/css/vueSlider.css"/>
+        <link rel="stylesheet" href="/static/photoSwiper/photoswipe.css">
+        <link rel="stylesheet" href="/static/photoSwiper/default-skin/default-skin.css">
+        <script src="/static/js/echarts.min.js"></script>
+    </head>
+
+    <body data-type="index">
+        <header class="am-topbar am-topbar-inverse admin-header" style="position: relative;">
+            <div class="am-topbar-collapse" id="topbar-collapse">
+                <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+                    <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                        <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                            <div id="weather"></div>
+                        </a>
+                        <ul class="am-dropdown-content tpl-dropdown-content">
+                            <li class="tpl-dropdown-content-external">
+                                <h3>当前城市 <span class="tpl-color-success" id="weatherCity"></span></h3>
+                            </li>
+                            <li class="tpl-dropdown-content-external">
+                                <div id="dayPicture"></div>
+                                <div id="temperature" style="padding-top: 20px;"></div>
+                                <div id="wind" style="padding-top: 10px;"></div>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                        <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                            <span class="tpl-header-list-user-ico"> <img id="iconImg" src="/static/img/default.jpg"></span>
+                        </a>
+                        <ul class="am-dropdown-content">
+                            <li id="logout"><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="tpl-page-container tpl-page-header-fixed" style="margin-top: 0;">
+            <!--内容展示区-->
+            <div class="row" id="showMessage">
+
+            </div>
+
+            <!-- Root element of PhotoSwipe. Must have class pswp. -->
+            <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+                <!-- Background of PhotoSwipe.
+                    It's a separate element as animating opacity is faster than rgba(). -->
+                <div class="pswp__bg"></div>
+                <!-- Slides wrapper with overflow:hidden. -->
+                <div class="pswp__scroll-wrap">
+
+                    <!-- Container that holds slides.
+                        PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                        Don't modify these 3 pswp__item elements, data is added later on. -->
+                    <div class="pswp__container">
+                        <div class="pswp__item"></div>
+                        <div class="pswp__item"></div>
+                        <div class="pswp__item"></div>
+                    </div>
+
+                    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                    <div class="pswp__ui pswp__ui--hidden">
+
+                        <div class="pswp__top-bar">
+
+                            <!--  Controls are self-explanatory. Order can be changed. -->
+
+                            <div class="pswp__counter"></div>
+
+                            <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                            <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                            <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                            <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                            <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                            <!-- element will get class pswp__preloader--active when preloader is running -->
+                            <div class="pswp__preloader">
+                                <div class="pswp__preloader__icn">
+                                    <div class="pswp__preloader__cut">
+                                        <div class="pswp__preloader__donut"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                            <div class="pswp__share-tooltip"></div>
+                        </div>
+
+                        <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                        </button>
+
+                        <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                        </button>
+
+                        <div class="pswp__caption">
+                            <div class="pswp__caption__center"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script src="http://www.jq22.com/jquery/jquery-2.1.1.js"></script>
+        <script src="/static/js/amazeui.min.js"></script>
+        <!--将时间戳转换为更易读的时间轴插件-->
+        <script src="/static/js/jquery.timeago.js"></script>
+        <!--ActiveMQ消息中间件插件-->
+        <script src="/static/js/amq_jquery_adapter.js"></script>
+        <script src="/static/js/amq.js"></script>
+        <!--天气插件-->
+        <script src="/static/js/template-native.js" title="text/javascript"></script>
+        <!--波形图裁剪插件-->
+        <script src="/static/js/vue.min.js"></script>
+        <script src="/static/js/vueSlider.js"></script>
+        <!--图片弹出放大预览插件-->
+        <!--图片弹出放大预览插件-->
+        <script src="/static/photoSwiper/photoswipe.min.js"></script>
+        <script src="/static/photoSwiper/photoswipe-ui-default.min.js"></script>
+        <script>
+            $(function() {
+                getMessage();
+                Init();
+            });
+            function Init() {
+                onLoad();
+                bindEvent();
+            }
+            function onLoad() {
+                // 开启/退出全屏
+                var $fullText = $('.admin-fullText');
+                $('#admin-fullscreen').on('click', function() {
+                    $.AMUI.fullscreen.toggle();
+                });
+                $(document).on($.AMUI.fullscreen.raw.fullscreenchange, function() {
+                    $fullText.text($.AMUI.fullscreen.isFullscreen ? '退出全屏' : '开启全屏');
+                });
+                // 加载天气信息
+                getCityWeather('郑州');
+                // 加载登录用户信息
+                loadLoginMessage();
+            }
+            // 加载登录用户信息
+            function loadLoginMessage() {
+                $.ajax({
+                    url : '/manager/load_login_message.do',
+                    type : 'POST',
+                    dataType : 'json',
+                    success : function(res) {
+                        if (res.status == 0) {
+                            $('#iconImg').attr('src', res.data);
+                        } else if (res.status == 10) {
+                            window.location.href = 'http://uc.hndt.com/login.xhtml';
+                        } else {
+                            alert(res.msg);
+                        }
+                    },
+                    error : function(err) {
+                        alert('好像哪里不对了')
+                    }
+                });
+            }
+            // 获取ActiveMQ服务器发送的消息
+            function getMessage() {
+                $.ajax({
+                    url : '/message/get_channel_id.do',
+                    type : 'POST',
+                    dataType : 'json',
+                    success : function(res) {
+                        if (res.status == 0) {
+                            var channelId = res.data;
+                            var myDestination = 'topic://GB.PINLV.ZHUBO.' + channelId;
+                            var amq = org.activemq.Amq;
+                            amq.init({
+                                uri: '/amq', //AjaxServlet所配置对应的URL
+                                logging: false,//激活日志记录
+                                timeout: 20,//保持连接时长，单位为秒
+                                clientId: (new Date()).getTime().toString() //防止多个浏览器窗口标签共享同一个JSESSIONID
+                            });
+
+                            // 接收消息
+                            var myHandler = {
+                                rcvMessage: function(message) {
+                                    var messageData = JSON.parse(message.textContent);
+
+                                    var color = ['green', 'purple', 'blue', 'red'];
+
+                                    if (messageData.file_type !== 'VOICE') {
+                                        var html = '';
+
+                                        // 如果是图片，则显示图片并实现预览
+                                        var picHtml = '';
+                                        if (messageData.file_type === 'PIC') {
+                                            picHtml = '<img class="preImg" src="' + messageData.content + '" style="width: auto;height: 120px;max-width: 200px">';
+                                        } else if (messageData.file_type === 'TEXT') {
+                                            picHtml = messageData.content;
+                                        }
+
+                                        html += '<div class="am-u-lg-12 am-u-md-12 am-u-sm-12">' +
+                                                '<div class="dashboard-stat ' + color[Math.floor(Math.random()*color.length)] + '" style="height: auto">' +
+                                                '<div class="visual" style="position: relative">' +
+                                                '<i class="am-icon-comments-o"></i>' +
+                                                '</div>' +
+                                                '<div style="color:white;">' +
+                                                '<div style="margin-top:20px;">' +
+                                                '<img class="am-circle" width="50" height="50" src="' + messageData.icon + '"/>' +
+                                                '<span style="margin-left: 15px;font-size: 24px;font-weight: bold;">' + messageData.nickname + '</span>' +
+                                                '<div style="margin: 15px 5% 20px 5%;">' + picHtml + '</div>' +
+                                                '</div>' +
+                                                '<div style="position: absolute;right: 7%;top:15px;font-size: 16px;"><abbr class="loaded timeago"></abbr></div>' +
+                                                '</div>' +
+                                                '</div>' +
+                                                '</div>';
+
+                                        $('#showMessage').prepend(html);
+
+                                        // 初始化设置时间轴
+                                        prepareDynamicDates();
+                                        $(".timeago").timeago();
+
+                                        // 初始化图片放大预览插件
+                                        setTimeout(function() {
+                                            photoSwiper.init($('#showMessage .preImg'));
+                                        },20);
+                                    }
+                                }
+                            };
+
+                            amq.addListener('empress-topic1', myDestination, myHandler.rcvMessage);
+                        } else if (res.status == 10) {// 需要登录
+                            window.location.href = 'http://uc.hndt.com/login.xhtml';
+                        } else {
+                            alert(res.msg);
+                        }
+                    }
+                });
+            }
+            function bindEvent() {
+                // 头部导航隐藏菜单
+                $('.tpl-header-nav-hover-ico').on('click', function() {
+                    $('.tpl-left-nav').toggle();
+                    $('.tpl-content-wrapper').toggleClass('tpl-content-wrapper-hover');
+                });
+                // 退出登录
+                $('#logout').click(function() {
+                    $.ajax({
+                        url : '/manager/log_out.do',
+                        type : 'POST',
+                        dataType : 'json',
+                        success : function(res) {
+                            if (res.status == 0) {
+                                window.location.href = 'http://uc.hndt.com/login.xhtml';
+                            } else if (res.status == 10) {
+                                window.location.href = 'http://uc.hndt.com/login.xhtml';
+                            } else {
+                                alert(res.msg);
+                            }
+                        },
+                        error : function(err) {
+                            progress.done();
+                            alert('好像哪里不对了')
+                        }
+                    });
+                });
+            }
+            // 获取城市天气
+            function getCityWeather(cityName) {
+                $.ajax({
+                    url:"http://api.map.baidu.com/telematics/v3/weather",
+                    type:"get",
+                    data:{
+                        location:cityName,
+                        output:'json',
+                        ak:'6tYzTvGZSOpYB5Oc2YGGOKt8'
+                    },
+                    /*预期服务器端返回的数据类型，假设我现在跨域了，我就改成jsonp 就可以了 */
+                    dataType:"jsonp",
+                    success:function(data){
+                        // 百度那边的 数据已经回来，我现在要解析这个数据.
+                        var weatherData = data.results[0].weather_data;
+
+                        // 百度会返回给我们后四天的天气数据，只获取第一条数据，即当天的天气数据
+                        var showTitle = weatherData[0];
+
+                        // 填充顶部天气信息
+                        var titleWeather = '';
+                        titleWeather += '<span>' + showTitle.date + '</span>';
+                        titleWeather += '<span style="margin-left: 15px;">' + showTitle.weather + '</span>';
+                        $('#weather').html(titleWeather);
+
+                        // 设置卡片天气详细信息
+                        $('#weatherCity').html(cityName);
+                        var dayUrl = '';
+                        dayUrl += '<div>白天：<img src=' + showTitle.dayPictureUrl + '></div><br/>';
+                        dayUrl += '<div>夜晚：<img src=' + showTitle.nightPictureUrl + '></div>';
+                        $('#dayPicture').html(dayUrl);
+                        $('#temperature').html(showTitle.temperature);
+                        $('#wind').html(showTitle.weather + " " + showTitle.wind);
+                    }
+                });
+            }
+            // 设置时间轴
+            function prepareDynamicDates() {
+                $('abbr.loaded').attr("title", iso8601(new Date()));
+            }
+            function iso8601(date) {
+                return date.getUTCFullYear()
+                        + "-" + zeropad(date.getUTCMonth()+1)
+                        + "-" + zeropad(date.getUTCDate())
+                        + "T" + zeropad(date.getUTCHours())
+                        + ":" + zeropad(date.getUTCMinutes())
+                        + ":" + zeropad(date.getUTCSeconds()) + "Z";
+            }
+            function zeropad (num) {
+                return ((num < 10) ? '0' : '') + num;
+            }
+            // 初始化预览图片
+            function ImageShrink() {
+                $('.example img').zoomify({scale:0.5});
+            }
+            // 初始化预览图片
+            var photoSwiper = {
+                imgDom:null,
+                init:function ($dom) {
+                    this.imgDom = $dom
+                    this.getItems()
+                    this.addImgIndex()
+                    var me = this
+                    this.imgDom.click(function(item) {
+                        me.toBigPic($(this).data('index'))
+                    })
+                },
+                addImgIndex:function() {
+                    var imgs = this.imgDom
+                    for(var i=0;i<imgs.length;i++) {
+                        var img = imgs[i]
+                        img.dataset.index = i
+                    }
+                },
+                toBigPic:function(index) {
+                    var pswpElement = document.querySelectorAll('.pswp')[0];
+                    // build items array
+                    var items = this.getItems()
+                    // define options (if needed)
+                    var options = {
+
+                    };
+                    options.index = index;
+                    options.mainClass = 'pswp--minimal--dark';
+                    options.barsSize = {top:0,bottom:0};
+                    options.captionEl = false;
+                    options.fullscreenEl = false;
+                    options.shareEl = false;
+                    options.bgOpacity = 0.85;
+                    options.tapToClose = true;
+                    options.closeOnScroll =false;
+                    options.tapToToggleControls = false;
+                    // Initializes and opens PhotoSwipe
+                    var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+                    gallery.init();
+                },
+                getItems:function() {
+                    var items = []
+                    var imgs = this.imgDom
+                    if(imgs.length > 0) {
+                        for (var i = 0; i < imgs.length; i++) {
+                            var img = imgs[i];
+                            var item = {
+                                src: img.src,
+                                w: img.naturalWidth,
+                                h: img.naturalHeight
+                            };
+                            items.push(item);
+                        }
+                    }
+                    return items;
+                },
+
+            }
+        </script>
+    </body>
+</html>

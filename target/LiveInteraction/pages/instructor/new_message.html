@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>河南广播电视台</title>
+    <link rel="stylesheet" href="/static/css/amazeui.min.css" />
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="/static/css/vueSlider.css"/>
+    <link rel="stylesheet" href="/static/css/amazeui.switch.css"/>
+    <link rel="stylesheet" href="/static/photoSwiper/photoswipe.css">
+    <link rel="stylesheet" href="/static/photoSwiper/default-skin/default-skin.css">
+    <script src="/static/js/echarts.min.js"></script>
+    <style>
+        .am-switch{
+            z-index: 9999 !important;
+        }
+        .am-table {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body data-type="index">
+<header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+        <a href="javascript:;" class="tpl-logo">
+            <img src="/static/img/logo.png?123" alt="">
+        </a>
+    </div>
+    <div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right"></div>
+
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+    <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+        <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                    <div id="weather"></div>
+                </a>
+                <ul class="am-dropdown-content tpl-dropdown-content">
+                    <li class="tpl-dropdown-content-external">
+                        <h3>当前城市 <span class="tpl-color-success" id="weatherCity"></span></h3>
+                    </li>
+                    <li class="tpl-dropdown-content-external">
+                        <div id="dayPicture"></div>
+                        <div id="temperature" style="padding-top: 20px;"></div>
+                        <div id="wind" style="padding-top: 10px;"></div>
+                    </li>
+                </ul>
+            </li>
+            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                    <span class="am-icon-comment-o"></span> 消息 <span class="totalMessage" class="am-badge tpl-badge-danger am-round"></span></span>
+                </a>
+                <ul class="am-dropdown-content tpl-dropdown-content">
+                    <li class="tpl-dropdown-list-bdbc">
+                        <a onclick="showOppositeMessage()" class="tpl-dropdown-list-fl">
+                            <span class="am-icon-comment-o am-icon-plus tpl-dropdown-ico-btn-size font-green"></span>
+                            总 消 息：<span class="totalMessage" class="tpl-dropdown-content-font"></span>
+                        </a>
+                    </li>
+                    <li class="tpl-dropdown-list-bdbc">
+                        <a onclick="showOppositeMessage('VOICE')" class="tpl-dropdown-list-fl">
+                            <span class="am-icon-microphone am-icon-plus tpl-dropdown-ico-btn-size font-green"></span>
+                            语音消息：<span class="voiceMessage" class="tpl-dropdown-content-font"></span>
+                        </a>
+                    </li>
+                    <li class="tpl-dropdown-list-bdbc">
+                        <a onclick="showOppositeMessage('TEXT')" class="tpl-dropdown-list-fl">
+                            <span class="am-icon-file-text-o am-icon-plus tpl-dropdown-ico-btn-size font-green"></span>
+                            文本消息：<span class="textMessage" class="tpl-dropdown-content-font"></span>
+                        </a>
+                    </li>
+                    <li class="tpl-dropdown-list-bdbc">
+                        <a onclick="showOppositeMessage('PIC')" class="tpl-dropdown-list-fl">
+                            <span class="am-icon-picture-o tpl-dropdown-ico-btn-size font-green"></span>
+                            图文消息：<span class="picMessage" class="tpl-dropdown-content-font"></span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                    <span id="loginName" class="tpl-header-list-user-nick"></span><span class="tpl-header-list-user-ico"> <img id="iconImg" src="/static/img/default.jpg"></span>
+                </a>
+                <ul class="am-dropdown-content">
+                    <li id="logout"><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<div class="tpl-page-container tpl-page-header-fixed">
+    <div class="tpl-left-nav tpl-left-nav-hover">
+        <div class="tpl-left-nav-title">
+            操作列表
+        </div>
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <li class="tpl-left-nav-item">
+                    <a href="new_message.html" class="nav-link active">
+                        <i class="am-icon-comment-o" style="padding-right: 3px;"></i>
+                        <span>最新</span>
+                    </a>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="wechat_message.html" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-weixin"></i>
+                        <span>微信</span>
+                    </a>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="app_message.html" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-mobile am-icon-sm"></i>
+                        <span style="margin-left: 10px;">APP</span>
+                    </a>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="weibo_message.html" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-weibo"></i>
+                        <span>微博</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--内容展示区-->
+    <div class="row">
+        <div class="am-u-md-9">
+            <!--中间显示记录列表分页信息-->
+            <div class="tpl-portlet">
+                <div class="tpl-portlet-title">
+                    <div class="tpl-caption font-green am-u-sm-3">
+                        <i class="am-icon-hacker-news"></i>
+                        <span> 最新消息</span>
+                    </div>
+                    <input id="autoPublish" type="checkbox" data-size="xs" data-am-switch data-label-text="自动发布"/>
+                </div>
+
+                <div class="tpl-echarts">
+                    <div class="tpl-block">
+                        <div class="am-g">
+                            <div class="am-u-sm-12 am-u-md-6">
+                                <div class="am-btn-toolbar">
+                                    <div class="am-btn-group am-btn-group-xs">
+                                        <button type="button" class="am-btn am-btn-default am-btn-secondary" id="batchPublish"><span class="am-icon-plus"></span> 发布</button>
+                                        <button type="button" class="am-btn am-btn-default am-btn-danger" id="batchDelete"><span class="am-icon-trash-o"></span> 删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="am-u-sm-12 am-u-md-3">
+                                <div class="am-input-group am-input-group-sm">
+                                    <input type="text" class="am-form-field" id="contentText">
+                                            <span class="am-input-group-btn">
+                                                <button class="am-btn am-btn-secondary tpl-am-btn-secondary am-icon-search" type="button" id="searchBtn"></button>
+                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="am-g">
+                            <div class="am-u-sm-12">
+                                <form class="am-form">
+                                    <table class="am-table am-table-hover table-main">
+                                        <thead>
+                                        <tr>
+                                            <th class="table-check"><input type="checkbox" id="invertSelect" class="tpl-table-fz-check"></th>
+                                            <th class="table-id" style="width: 60px;">来源</th>
+                                            <th class="table-title" style="width: 60px;">类型</th>
+                                            <th class="table-type am-hide-sm-only" style="width: 550px;">内容</th>
+                                            <th class="table-author am-hide-sm-only" style="width: 150px;">发信人</th>
+                                            <th class="table-date am-hide-sm-only" style="width: 180px;">时间</th>
+                                            <th class="table-type am-hide-sm-only" style="width: 50px;">状态</th>
+                                            <th class="table-set" style="width: 100px;">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="newContent">
+
+                                        </tbody>
+                                    </table>
+                                    <div class="am-cf">
+                                        <div class="am-fr" style="font-size: 14px;">
+                                            <ul class="am-pagination tpl-pagination" id="pagination"></ul>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--下侧显示波形图信息-->
+            <div class="row" id="bottomWave">
+                <div class="am-u-md-12" style="margin-top:20px;">
+                    <div class="tpl-portlet">
+                        <div class="tpl-portlet-title">
+                            <div class="tpl-caption font-green">
+                                <i class="am-icon-bar-chart-o"></i>
+                                <span> 波形图</span>
+                            </div>
+                        </div>
+                        <div class="aduio-wave-wrap" style="position: relative">
+                            <div id="waveImg">
+
+                            </div>
+                            <div id="app" style="position: absolute;top: 31px;left:3px;right:3px;width: 600px">
+                                <span id="startTime" style="display: none">{{value[0]}}</span><span id="rangeTime" style="display: none">{{value[1]}}</span>
+                                <vue-slider class="vue-slider" ref="slider" v-model="value" v-bind="aduioWave.default"></vue-slider>
+                            </div>
+                            <div id="showVoiceMessage" style="position: absolute;top: 36px;left:8px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--右侧显示某一条记录的详细信息-->
+        <div class="am-u-md-3">
+            <div class="tpl-portlet">
+                <div class="tpl-portlet-title">
+                    <div class="tpl-caption font-green">
+                        <i class="am-icon-list-ul"></i>
+                        <span> 详细信息</span>
+                    </div>
+                </div>
+
+                <div class="tpl-echarts tpl-amazeui-form">
+                    <form class="am-form am-form-horizontal">
+                        <div class="am-form-group">
+                            <label class="am-form-label" for="channelName">频率</label>
+                            <input type="text" class="" id="channelName" placeholder="填写频率名称" value="音乐广播" disabled>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-form-label" for="programName">节目名称</label>
+                            <input type="text" class="" id="programName" placeholder="填写节目名称">
+                        </div>
+                        <div class="am-form-group">
+                            <label for="send" class="am-form-label">发信人</label>
+                            <input type="text" class="" id="send" placeholder="这里填写发信人" disabled>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="content" class="am-form-label">内容</label>
+                            <textarea class="" rows="5" id="content" placeholder="输入内容"></textarea>
+                        </div>
+                        <div class="am-form-group">
+                            <button type="button" class="am-btn am-btn-primary btn-loading-example" id="sendMessageBtn" data-am-loading="{loadingText: '推荐发送中...'}">推荐发送</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 9999">
+        <!-- Background of PhotoSwipe.
+            It's a separate element as animating opacity is faster than rgba(). -->
+        <div class="pswp__bg"></div>
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+
+            <!-- Container that holds slides.
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+            <div class="pswp__ui pswp__ui--hidden">
+
+                <div class="pswp__top-bar">
+
+                    <!--  Controls are self-explanatory. Order can be changed. -->
+
+                    <div class="pswp__counter"></div>
+
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                    <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                    <!-- element will get class pswp__preloader--active when preloader is running -->
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="http://www.jq22.com/jquery/jquery-2.1.1.js"></script>
+<script src="/static/js/amazeui.min.js"></script>
+<script src="/static/js/amazeui.switch.min.js" ></script>
+<!--ActiveMQ消息中间件插件-->
+<script src="/static/js/amq_jquery_adapter.js" charset="utf-8"></script>
+<script src="/static/js/amq.js" charset="utf-8"></script>
+<!--分页插件-->
+<script src="/static/js/jqPaginator.min.js" type="text/javascript"></script>
+<!--天气插件-->
+<script src="/static/js/template-native.js" title="text/javascript"></script>
+<!--波形图裁剪插件-->
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/vueSlider.js"></script>
+<!--图片弹出放大预览插件-->
+<script src="/static/photoSwiper/photoswipe.min.js"></script>
+<script src="/static/photoSwiper/photoswipe-ui-default.min.js"></script>
+<script>
+    var data = {
+        pageNum : 1,// 当前页
+        pageSize : 12,// 每页显示多少数据
+        content: '',
+        fileType: ''
+    };
+    var vm = null;
+    var progress = $.AMUI.progress;
+    var file = {
+    };
+
+    $(function() {
+        onLoad();
+        bindEvent();
+        getMessage();
+    });
+    function onLoad() {
+        // 开启/退出全屏
+        var $fullText = $('.admin-fullText');
+        $('#admin-fullscreen').on('click', function() {
+            $.AMUI.fullscreen.toggle();
+        });
+        $(document).on($.AMUI.fullscreen.raw.fullscreenchange, function() {
+            $fullText.text($.AMUI.fullscreen.isFullscreen ? '退出全屏' : '开启全屏');
+        });
+        // 初始化页面信息
+        initPage();
+        // 加载最新消息列表
+        addItems(data.pageNum, data.pageSize);
+        // 加载天气信息
+        getCityWeather('郑州');
+        // 初始化裁剪波形图操作
+        vueSliderRangeTime.init(0);
+    }
+    // 初始化加载页面信息
+    function initPage() {
+        $.ajax({
+            url : '/message/init.do',
+            type : 'POST',
+            dataType : 'json',
+            success : function(res) {
+                if (res.status == 0) {
+                    var data = res.data;
+                    // 设置头像
+                    if (data.loginIcon !== null && data.loginIcon !== 'null' && data.loginIcon !== 'undefined') {
+                        $('#iconImg').attr('src', data.loginIcon);
+                    }
+                    // 设置名称
+                    $('#loginName').html(data.loginName);
+                    // 设置频率名称
+                    $('#channelName').val(data.channelName);
+                    // 消息总数
+                    $('.totalMessage').html(data.totalMessage);
+                    $('.voiceMessage').html(data.totalVoiceMessage);
+                    $('.picMessage').html(data.totalPicMessage);
+                    $('.textMessage').html(data.totalTextMessage);
+                } else if (res.status == 10) {// 需要登录
+                    window.location.href = 'http://uc.hndt.com/login.xhtml';
+                } else {
+                    alert(res.msg);
+                }
+            },
+            error : function(err) {
+                alert('好像哪里不对了')
+            }
+        });
+    }
+    function showOppositeMessage(fileType) {
+        data.fileType = fileType;
+        addItems(data.pageNum, data.pageSize);
+    }
+    // 显示消息列表
+    function addItems(pageNum, pageSize) {
+        var formData = new FormData();
+        formData.append("pageNum", pageNum);
+        formData.append("pageSize", pageSize);
+        if (data.content != '') {
+            formData.append("content", data.content);
+        }
+        if (data.fileType != '') {
+            formData.append("fileType", data.fileType);
+        }
+
+        $.ajax({
+            url : '/message/list.do',
+            data : formData,
+            type : 'POST',
+            dataType : 'json',
+            contentType : false,
+            processData : false,
+            cache : false,
+            success: function(res) {
+                if (res.status === 0) {
+                    var pageInfo = res.data;
+                    console.log(pageInfo)
+
+                    var messageSource = '';
+                    var messageType = '';
+                    var messageStatus = '';
+
+                    var html = '';
+                    $.each(pageInfo.list, function(index, item) {
+                        if (item.source === 'WEI_XIN') {
+                            messageSource = '<i class="am-icon-weixin" title="微信"></i>';
+                        } else if (item.source === 'HNGB_APP') {
+                            messageSource = '<i class="am-icon-mobile" title="APP" style="font-size: 20px;margin-top: -7px;"></i>';
+                        } else if (item.source === 'WEI_BO') {
+                            messageSource = '<i class="am-icon-weibo" title="微博"></i>';
+                        }
+
+                        if (item.fileType === 'TEXT') {
+                            messageType = '<i class="am-icon-file-text-o" title="文本"></i>';
+                        } else if (item.fileType === 'PIC') {
+                            messageType = '<i class="am-icon-picture-o" title="图片"></i>';
+                            item.content =  '<img  src="' + item.content + '" style="width: auto;height: 120px;max-width: 200px">';
+                        } else if (item.fileType === 'VOICE') {
+                            item.content = item.addMsg;
+                            messageType = '<i class="am-icon-microphone" title="语音" style="font-size: 16px;margin-top: -5px;"></i>';
+                        }
+
+                        if (item.status == 0) {
+                            messageStatus = '<span class="label label-sm label-success">新消息</span>';
+                        } else if (item.status == 1) {
+                            messageStatus = '<span class="label label-sm label-warning">已发布</span>';
+                        } else if (item.status == 2) {
+                            messageStatus = '<span class="label label-sm label-danger">已推荐</span>';
+                        } else {
+                            messageStatus = '<span class="label label-sm label-default">未知</span>';
+                        }
+
+                        html += '<tr id="trMessage" data-id="' + item.id + '">' +
+                                '<td><input type="checkbox" class="selectCheck" value="' + item.transactionId + '"></td>'+
+                                '<td>' + messageSource + '</td>'+
+                                '<td>' + messageType + '</td>'+
+                                '<td class="am-hide-sm-only" style="word-break:break-all; word-wrap:break-word;">' + item.content + '</td>'+
+                                '<td class="am-hide-sm-only">' + item.nickname + '</td>'+
+                                '<td class="am-hide-sm-only">' + getMyDate(item.createTime) + '</td>'+
+                                '<td class="an-hide-sm-only">' + messageStatus + '</td>' +
+                                '<td>'+
+                                '<div class="am-btn-toolbar">'+
+                                '<div class="am-btn-group am-btn-group-xs">'+
+                                '<a style="background-color: white" class="am-btn am-btn-default am-btn-xs am-text-danger" id="deleteMessageBtn" data-id="' + item.transactionId + '"><span class="am-icon-trash-o"></span> 删除</a>'+
+                                '</div>'+
+                                '</div>'+
+                                '</td>'+
+                                '</tr>';
+                    });
+                    $('#newContent').html(html);
+
+                    // 设置分页信息
+                    loadPage(pageInfo.pages, pageInfo.pageNum,  pageInfo.total);
+
+                    // 设置初始化一条详细信息，默认使用信息列表的第一条数据
+                    showItem(pageInfo.list[0].id);
+
+                    // 初始化图片放大预览插件
+                    setTimeout(function() {
+                        photoSwiper.init($('#newContent img'))
+                    },20);
+                } else if (res.status == 10) {// 需要登录
+                    window.location.href = 'http://uc.hndt.com/login.xhtml';
+                } else {
+                    alert(res.msg);
+                }
+            },
+            error : function(errMsg) {
+                alert('好像哪里不对了');
+            }
+        });
+    }
+    // 加载分页信息（使用分页插件）
+    function loadPage(pages, pageNum, total) {
+        $.jqPaginator('#pagination', {
+            totalPages: pages,
+            visiblePages: 5,
+            currentPage: pageNum,
+            first: '<li class="first"><a href="javascript:;">首页</a></li>',
+            prev: '<li class="prev"><a href="javascript:;">上一页</a></li>',
+            next: '<li class="next"><a href="javascript:;">下一页</a></li>',
+            last: '<li class="last"><a href="javascript:;">末页</a></li>',
+            page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+            onPageChange: function (num, type) {
+                $('#pagination').prepend('<li style="margin-right:20px;margin-left:20px;">总页数：' + pages + ' 页</li>');
+                $('#pagination').prepend('<li>总条数：' + total + ' 条</li>');
+                if (type == "change") {
+                    data.pageNum = num;
+                    addItems(num, data.pageSize);
+                    loadPage(pages);
+                }
+            }
+        });
+    }
+    // 获取ActiveMQ服务器发送的消息
+    function getMessage() {
+        $.ajax({
+            url : '/message/get_channel_id.do',
+            type : 'POST',
+            dataType : 'json',
+            success : function(res) {
+                if (res.status == 0) {
+                    var channelId = res.data;
+                    var myDestination = 'topic://GB.PINLV.DAOBO.' + channelId;
+                    var amq = org.activemq.Amq;
+                    amq.init({
+                        uri: '/amq', //AjaxServlet所配置对应的URL
+                        logging: false,//激活日志记录
+                        timeout: 45,//保持连接时长，单位为秒
+                        clientId: (new Date()).getTime().toString() //防止多个浏览器窗口标签共享同一个JSESSIONID
+                    });
+
+                    // 接收消息
+                    var myHandler = {
+                        rcvMessage: function(message) {
+                            // 获取消息后，先保存到本地数据库，再获取分页信息
+                            var messageData = JSON.parse(message.textContent);
+                            messageData.checked = data.checked;
+                            console.log(messageData);
+
+                            $.ajax({
+                                url : '/message/insert.do',
+                                data : messageData,
+                                type : 'POST',
+                                dataType : 'json',
+                                success: function(res) {
+                                    if (res.status === 0) {
+                                        initPage();
+                                        addItems(data.pageNum, data.pageSize);
+                                    } else if (res.status == 10) {// 需要登录
+                                        window.location.href = 'http://uc.hndt.com/login.xhtml';
+                                    } else {
+                                        alert(res.msg);
+                                    }
+                                },
+                                error : function(errMsg) {
+                                    alert('好像哪里不对了');
+                                }
+                            });
+
+                        }
+                    };
+
+                    amq.addListener('empress-topic1', myDestination, myHandler.rcvMessage);
+                } else if (res.status == 10) {// 需要登录
+                    window.location.href = 'http://uc.hndt.com/login.xhtml';
+                } else {
+                    alert(res.msg);
+                }
+            }
+        });
+    }
+    function bindEvent() {
+        $('.btn-loading-example').click(function () {
+            var $btn = $(this);
+            $btn.button('loading');
+        });
+        // 头部导航隐藏菜单
+        $('.tpl-header-nav-hover-ico').on('click', function() {
+            $('.tpl-left-nav').toggle();
+            $('.tpl-content-wrapper').toggleClass('tpl-content-wrapper-hover');
+        });
+        // 搜索框的点击事件
+        $('#searchBtn').click(function() {
+            data.content = $.trim($('#contentText').val());
+            addItems(data.pageNum, data.pageSize);
+        });
+        // 删除一条消息
+        $('body').on('click','#deleteMessageBtn',function() {
+            var transactionId = $(this).data('id');
+
+            if(confirm("确认要删除？")) {
+                $.ajax({
+                    url : '/message/delete.do',
+                    data : {
+                        transactionId : transactionId
+                    },
+                    type : 'POST',
+                    dataType : 'json',
+                    success : function(res) {
+                        if (res.status == 0) {
+                            alert('消息删除成功');
+                            initPage();
+                            addItems(data.pageNum, data.pageSize);
+                        } else if (res.status == 10) {// 需要登录
+                            window.location.href = 'http://uc.hndt.com/login.xhtml';
+                        } else {
+                            alert(res.msg);
+                        }
+                    }
+                });
+            }
+        });
+        // 推荐发送按钮的点击事件
+        $('#sendMessageBtn').click(function() {
+            var receiverInfo = getReceiverInfo();
+            var transactionId = data.transactionId;
+
+            if (receiverInfo.status) {
+                // 1、将消息更新到本地数据库
+                // 2、如果消息类型是语音，需要生成xml文件
+                // 3、推荐消息
+                $.ajax({
+                    url : '/message/recommend_send_message.do',
+                    data : {
+                        content : receiverInfo.message.content,
+                        transactionId : transactionId
+                    },
+                    type : 'POST',
+                    dataType : 'json',
+                    success : function(res) {
+                        if (res.status == 0) {
+                            $('.btn-loading-example').button('reset');
+                            addItems(data.pageNum, data.pageSize);
+                        } else if (res.status == 10) {// 需要登录
+                            window.location.href = 'http://uc.hndt.com/login.xhtml';
+                        } else {
+                            alert(res.msg);
+                        }
+                    },
+                    error : function(err) {
+                        alert('好像哪里不对了')
+                    }
+                });
+            } else {
+                alert(receiverInfo.msg);
+            }
+        });
+        // 点击一个消息在右侧显示该消息的详细信息
+        $('body').on('click','#trMessage',function() {
+            // 设置背景颜色
+            $(this).attr('style', 'background-color:#ccc');
+            $(this).siblings().removeAttr('style');
+            // 填充右侧数据
+            var messageId = $(this).data('id');
+            showItem(messageId);
+        });
+        // 选择所有复选框
+        $('body').on('click', '#invertSelect', function() {
+            if($(this).is(":checked")){
+                $(".selectCheck").each(function(){
+                    $(this).prop("checked", true);
+                });
+            }else{
+                $(".selectCheck").each(function(){
+                    $(this).removeAttr("checked");
+                });
+            }
+        });
+        // 批量删除消息
+        $('#batchDelete').click(function() {
+            if(confirm("确认要删除？")) {
+                var ids = [];
+                $('.selectCheck').each(function () {
+                    if ($(this).is(":checked")) {
+                        ids.push($(this).val());
+                    }
+                });
+
+                if (ids.length === 0) {
+                    alert('请选择内容');
+                } else {
+                    $.ajax({
+                        url: '/message/batch_delete.do',
+                        data: {
+                            messageIds: JSON.stringify(ids)
+                        },
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.status === 0) {
+                                alert('消息删除成功');
+                                initPage();
+                                addItems(data.pageNum, data.pageSize);
+
+                                $(":checkbox").each(function(){
+                                    $(this).removeAttr("checked");
+                                });
+                            } else if (res.status == 10) {// 需要登录
+                                window.location.href = 'http://uc.hndt.com/login.xhtml';
+                            } else {
+                                alert(res.msg);
+                            }
+                        },
+                        error: function (err) {
+                            alert('好像哪里不对了')
+                        }
+                    });
+                }
+            }
+        });
+        // 裁剪
+        $('body').on('click','#cropBtn', function() {
+            progress.start();
+            var startTime = $('#startTime').html();
+            var duration = $('#rangeTime').html() - $('#startTime').html();
+            var srcFile = file.nowFile;
+
+            $.ajax({
+                url : '/message/radio_tailor.do',
+                data : {
+                    startTime : startTime,
+                    duration: duration,
+                    srcFile : srcFile
+                },
+                type : 'POST',
+                dataType : 'json',
+                success : function(res) {
+                    console.log(res);
+                    progress.done();
+                    if (res.status === 0) {
+                        var result = res.data;
+                        $('#wave').removeAttr('src');
+                        $('#wave').attr('src', "data:image/jpg;base64," + result.wave);
+                        vueSliderRangeTime.refresh(result.total);
+                        file.nowFile = result.srcFile;
+                    } else if (res.status == 10) {// 需要登录
+                        window.location.href = 'http://uc.hndt.com/login.xhtml';
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error : function(err) {
+                    progress.done();
+                    alert('好像哪里不对了')
+                }
+            });
+        });
+        // 撤回
+        $('body').on('click','#repealBtn', function() {
+            progress.start();
+            var srcFile = file.srcFile;
+            var nowFile = file.nowFile;
+
+            $.ajax({
+                url : '/message/radio_repeal.do',
+                data : {
+                    srcFile : srcFile,
+                    nowFile : nowFile
+                },
+                type : 'POST',
+                dataType : 'json',
+                success : function(res) {
+                    progress.done();
+                    if (res.status === 0) {
+                        var result = res.data;
+                        if (result != null && result != 'undefined') {
+                            $('#wave').removeAttr('src');
+                            $('#wave').attr('src', "data:image/jpg;base64," + result.wave);
+                            vueSliderRangeTime.refresh(result.total);
+                            file.nowFile = result.srcFile;
+                        }
+                    } else if (res.status == 10) {// 需要登录
+                        window.location.href = 'http://uc.hndt.com/login.xhtml';
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error : function(err) {
+                    progress.done();
+                    alert('好像哪里不对了')
+                }
+            });
+        });
+        // 保存
+        $('body').on('click', '#saveBtn', function() {
+            progress.start();
+            var srcFile = file.srcFile;
+            var nowFile = file.nowFile;
+
+            console.log(srcFile)
+            console.log(nowFile)
+
+            $.ajax({
+                url : '/message/radio_save.do',
+                data : {
+                    srcFile : srcFile,
+                    nowFile : nowFile,
+                    messageId : file.id
+                },
+                type : 'POST',
+                dataType : 'json',
+                success : function(res) {
+                    progress.done();
+                    if (res.status === 0) {
+                        var result = res.data;
+                        if (result != null && result != 'undefined') {
+                            $('#wave').removeAttr('src');
+                            $('#wave').attr('src', "data:image/jpg;base64," + result.wave);
+                            vueSliderRangeTime.refresh(result.total);
+                            file.nowFile = result.srcFile;
+                        }
+                    } else if (res.status == 10) {// 需要登录
+                        window.location.href = 'http://uc.hndt.com/login.xhtml';
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error : function(err) {
+                    progress.done();
+                    alert('好像哪里不对了')
+                }
+            });
+        });
+        // 试听
+        $('body').on('click', '#auditionBtn', function() {
+            var audio = $(this).children('audio').get(0)
+            var icon = $(this).children('span')
+            if(audio.paused) {
+                audio.play()
+                icon.removeClass('am-icon-play-circle-o').addClass('am-icon-pause-circle-o')
+            }else{
+                audio.pause()
+                icon.removeClass('am-icon-pause-circle-o').addClass('am-icon-play-circle-o')
+            }
+        });
+        // 增加音量
+        $('body').on('click', '#increaseVolumeBtn', function() {
+            progress.start();
+            var srcFile = file.srcFile;
+
+            $.ajax({
+                url : '/message/volume_tweak.do',
+                data : {
+                    srcFile : srcFile,
+                    type: 1
+                },
+                type : 'POST',
+                dataType : 'json',
+                success : function(res) {
+                    progress.done();
+                    if (res.status === 0) {
+
+                    } else if (res.status == 10) {// 需要登录
+                        window.location.href = 'http://uc.hndt.com/login.xhtml';
+                    } else {
+                        alert(res.msg)
+                    }
+                },
+                error : function(err) {
+                    progress.done();
+                    alert('好像哪里不对了')
+                }
+            });
+        });
+        // 减少音量
+        $('body').on('click', '#reduceVolumeBtn', function() {
+            progress.start();
+            var srcFile = file.srcFile;
+
+            $.ajax({
+                url : '/message/volume_tweak.do',
+                data : {
+                    srcFile : srcFile,
+                    type: 0
+                },
+                type : 'POST',
+                dataType : 'json',
+                success : function(res) {
+                    progress.done();
+                    if (res.status === 0) {
+
+                    } else if (res.status == 10) {// 需要登录
+                        window.location.href = 'http://uc.hndt.com/login.xhtml';
+                    } else {
+                        alert(res.msg)
+                    }
+                },
+                error : function(err) {
+                    progress.done();
+                    alert('好像哪里不对了')
+                }
+            });
+        });
+        // 批量发布消息
+        $('#batchPublish').click(function() {
+            var ids = [];
+            $('.selectCheck').each(function () {
+                if ($(this).is(":checked")) {
+                    ids.push($(this).val());
+                }
+            });
+
+            if (ids.length === 0) {
+                alert('请选择内容');
+            } else {
+                $.ajax({
+                    url: '/message/batch_publish_message.do',
+                    data: {
+                        messageIds: JSON.stringify(ids)
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.status === 0) {
+                            alert('消息发布成功');
+
+                            $(":checkbox").each(function(){
+                                $(this).removeAttr("checked");
+                            });
+
+                            addItems(data.pageNum, data.pageSize);
+                        } else if (res.status == 10) {// 需要登录
+                            window.location.href = 'http://uc.hndt.com/login.xhtml';
+                        } else {
+                            alert(res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        alert('好像哪里不对了')
+                    }
+                });
+            }
+        });
+        // 自动发布按钮
+        $('#autoPublish').on('switchChange.bootstrapSwitch', function (event,state) {
+            data.checked = state;
+        });
+        // 退出登录
+        $('#logout').click(function() {
+            $.ajax({
+                url : '/manager/log_out.do',
+                type : 'POST',
+                dataType : 'json',
+                success : function(res) {
+                    if (res.status == 0) {
+                        window.location.href = 'http://uc.hndt.com';
+                    } else if (res.status == 10) {
+                        window.location.href = 'http://uc.hndt.com';
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error : function(err) {
+                    progress.done();
+                    alert('好像哪里不对了')
+                }
+            });
+        });
+    }
+    // 显示一条消息
+    function showItem(id) {
+        $.ajax({
+            url : '/message/detail.do',
+            data : {
+                messageId : id
+            },
+            type : 'POST',
+            dataType : 'json',
+            success : function(res) {
+                if (res.status == 0) {
+                    var messageData = res.data;
+
+                    // 生成节目名称，生成规则：用户名_来源（微信、微博等）_来自哪里_时间戳（发送时的时间）
+                    var programName = '';
+                    programName = generateProgramName(messageData.nickname, messageData.source, messageData.city);
+                    $('#programName').val(programName);
+
+                    data.messageId = id;
+                    data.transactionId = messageData.transactionId;
+                    data.srcFile = messageData.content;
+
+                    $('#send').val(messageData.nickname);
+                    $('#content').val(messageData.content);
+                    $('#columnName').val(messageData.columnId);
+
+                    if (messageData.fileType !== 'TEXT') {
+                        $('#content').attr('disabled', 'disabled');
+                    } else {
+                        $('#content').removeAttr('disabled');
+                    }
+
+                    if (messageData.status == 2) {
+                        $('#sendMessageBtn').html('已推荐');
+                        $('#sendMessageBtn').attr('disabled', 'disabled');
+                    } else {
+                        $('#sendMessageBtn').removeAttr('disabled');
+                        $('#sendMessageBtn').html('推荐发送');
+                    }
+
+                    // 显示波形图
+                    if (messageData.fileType === 'VOICE') {
+                        $('#bottomWave').show();
+                        var waveImg = '';
+                        var content = messageData.content;
+                        content = content.substr(content.indexOf('/generate'), content.length) + "?" + new Date().getTime();
+                        waveImg += '<div class="am-btn-group am-btn-group-xs" style="margin-bottom: -1px;">' +
+                                '<button id="repealBtn" class="am-btn am-btn-default am-btn-xs am-text-danger" style="background-color: white"><span class="am-icon-mail-reply"></span> 撤回</button>' +
+                                '<button id="cropBtn" class="am-btn am-btn-default am-btn-xs am-text-success" style="background-color: white"><span class="am-icon-crop"></span> 裁剪</button>' +
+                                '<button id="saveBtn" class="am-btn am-btn-default am-btn-xs am-text-secondary" style="background-color: white"><span class="am-icon-save"></span> 保存</button>' +
+                                '<button id="auditionBtn" class="am-btn am-btn-default am-btn-xs am-text-justify" style="background-color: white"><span class="am-icon-play-circle-o"></span> 试听 <audio src="' + content + '" style="display: none;"/></button>' +
+                                '<button id="increaseVolumeBtn" class="am-btn am-btn-default am-btn-xs" style="background-color: white"><span class="am-icon-volume-down"></span></button>' +
+                                '<button id="reduceVolumeBtn" class="am-btn am-btn-default am-btn-xs" style="background-color: white"><span class="am-icon-volume-up"></span></button>' +
+                                '</div>' +
+                                '<img id="wave" class="am-img-responsive am-img-thumbnail" src="data:image/jpg;base64,' + messageData.wave + '" title="' + messageData.content + '">';
+                        $('#waveImg').html(waveImg);
+                        $('#showVoiceMessage').html(messageData.addMsg);
+                        vueSliderRangeTime.refresh(messageData.totalDuration);
+                        file.srcFile = messageData.content;
+                        file.nowFile = messageData.content;
+                        file.id = id;
+                    } else {
+                        $('#bottomWave').hide();
+                    }
+                } else if (res.status == 10) {
+                    window.location.href = "http://uc.hndt.com/login.xhtml";
+                } else {
+                    alert(res.msg);
+                }
+            },
+            error : function(err) {
+                alert('好像哪里不对了')
+            }
+        });
+    }
+    // 生成节目名称
+    function generateProgramName(sendName, source, address) {
+        return sendName + '_' + source + '_' + address + '_' + new Date().getTime();
+    }
+    // 将时间戳转换成 2017-10-01 22:10:10 格式的时间字符串
+    function getMyDate(str){
+        var oDate = new Date(str),
+                oYear = oDate.getFullYear(),
+                oMonth = oDate.getMonth()+1,
+                oDay = oDate.getDate(),
+                oHour = oDate.getHours(),
+                oMin = oDate.getMinutes(),
+                oSen = oDate.getSeconds(),
+                oTime = oYear +'-'+ zeroFill(oMonth) +'-'+ zeroFill(oDay) +' '+ zeroFill(oHour) +':'+ zeroFill(oMin) +':'+zeroFill(oSen);//最后拼接时间
+        return oTime;
+    };
+    // 将当前时间转换成 2017-10-01 22:10:10 格式的时间字符串
+    function getCurrentDate(){
+        var oDate = new Date(),
+                oYear = oDate.getFullYear(),
+                oMonth = oDate.getMonth()+1,
+                oDay = oDate.getDate(),
+                oHour = oDate.getHours(),
+                oMin = oDate.getMinutes(),
+                oSen = oDate.getSeconds(),
+                oTime = oYear +'年'+ zeroFill(oMonth) +'月'+ zeroFill(oDay) +'日 '+ zeroFill(oHour) +':'+ zeroFill(oMin) +':'+zeroFill(oSen);//最后拼接时间
+        return oTime;
+    };
+    // 补零
+    function zeroFill(i){
+        if (i >= 0 && i <= 9) {
+            return "0" + i;
+        } else {
+            return i;
+        }
+    }
+    // 获取表单参数并校验
+    function getReceiverInfo() {
+        // 存放获取的表单信息
+        var receiverInfo = {};
+        // 定义返回对象
+        var result = {
+            status : false,
+            msg : ''
+        };
+
+        receiverInfo.content = $.trim($('#content').val());
+        receiverInfo.columnId = $.trim($('#columnName').val());
+        receiverInfo.id = data.messageId;
+
+        if (!validate(receiverInfo.content, 'require')) {
+            result.msg = '请输入内容';
+            return result;
+        }
+        result.status = true;
+        result.msg = '验证通过';
+        result.message = receiverInfo;
+
+        return result;
+    }
+    // 参数验证方法
+    function validate(value, type) {
+        var value = $.trim(value);
+        // 非空验证
+        if ('require' === type) {
+            return !!value;// 如果value为空则返回false，否则返回true
+        }
+    }
+    // 获取城市天气
+    function getCityWeather(cityName) {
+        $.ajax({
+            url:"http://api.map.baidu.com/telematics/v3/weather",
+            type:"get",
+            data:{
+                location:cityName,
+                output:'json',
+                ak:'6tYzTvGZSOpYB5Oc2YGGOKt8'
+            },
+            /*预期服务器端返回的数据类型，假设我现在跨域了，我就改成jsonp 就可以了 */
+            dataType:"jsonp",
+            success:function(data){
+                // 百度那边的 数据已经回来，我现在要解析这个数据.
+                var weatherData = data.results[0].weather_data;
+
+                // 百度会返回给我们后四天的天气数据，只获取第一条数据，即当天的天气数据
+                var showTitle = weatherData[0];
+
+                // 填充顶部天气信息
+                var titleWeather = '';
+                titleWeather += '<span>' + showTitle.date + '</span>';
+                titleWeather += '<span style="margin-left: 15px;">' + showTitle.weather + '</span>';
+                $('#weather').html(titleWeather);
+
+                // 设置卡片天气详细信息
+                $('#weatherCity').html(cityName);
+                var dayUrl = '';
+                dayUrl += '<div>白天：<img src=' + showTitle.dayPictureUrl + '></div><br/>';
+                dayUrl += '<div>夜晚：<img src=' + showTitle.nightPictureUrl + '></div>';
+                $('#dayPicture').html(dayUrl);
+                $('#temperature').html(showTitle.temperature);
+                $('#wind').html(showTitle.weather + " " + showTitle.wind);
+            }
+        });
+    }
+    // 波形图的裁剪
+    var vueSliderRangeTime = function() {
+        var vm = null
+        function initSlider (duration) {
+            vm = new Vue({
+                el:'#app',
+                data: {
+                    value: [0,duration],
+                    aduioWave:{
+                        default:{
+                            value: 0,
+                            width: 'auto',
+                            height: 100,
+                            direction: 'horizontal',
+                            dotSize: 10,
+                            dotWidth:8,
+                            dotHeight:100,
+                            eventType: 'auto',
+                            min: 0,
+                            max: duration,
+                            interval: 1,
+                            disabled: false,
+                            show: true,
+                            realTime: false,
+                            tooltip: 'always',
+                            formatter: "{value} s",
+                            clickable: true,
+                            tooltipDir: 'bottom',
+                            piecewise: false,
+                            lazy: false,
+                            reverse: false,
+                            speed: 0.5,
+                            bgStyle: {
+                                background:'rgba(0,0,0,0)'
+                            },
+                            sliderStyle: null,
+                            tooltipStyle: null,
+                            processStyle: {
+                                background:'rgba(0,0,0,0.5)'
+                            },
+                            piecewiseStyle: null
+                        }
+                    }
+                }
+            })
+        }
+
+        return {
+            init:function(duration) {
+                return initSlider(duration)
+            },
+            refresh:function(duration) {
+                vm.$data.value = [0,duration]
+                vm.$data.aduioWave.default.max = duration
+            }
+        }
+    }();
+    // 初始化预览图片
+    var photoSwiper = {
+        imgDom:null,
+        init:function ($dom) {
+            this.imgDom = $dom
+            this.getItems()
+            this.addImgIndex()
+            var me = this
+            this.imgDom.click(function(item) {
+                me.toBigPic($(this).data('index'))
+            })
+        },
+        addImgIndex:function() {
+            var imgs = this.imgDom
+            for(var i=0;i<imgs.length;i++) {
+                var img = imgs[i]
+                img.dataset.index = i
+            }
+        },
+        toBigPic:function(index) {
+            var pswpElement = document.querySelectorAll('.pswp')[0];
+            // build items array
+            var items = this.getItems()
+            // define options (if needed)
+            var options = {
+
+            };
+            options.index = index;
+            options.mainClass = 'pswp--minimal--dark';
+            options.barsSize = {top:0,bottom:0};
+            options.captionEl = false;
+            options.fullscreenEl = false;
+            options.shareEl = false;
+            options.bgOpacity = 0.85;
+            options.tapToClose = true;
+            options.closeOnScroll =false;
+            options.tapToToggleControls = false;
+            // Initializes and opens PhotoSwipe
+            var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+            gallery.init();
+        },
+        getItems:function() {
+            var items = []
+            var imgs = this.imgDom
+            if(imgs.length > 0) {
+                for (var i = 0; i < imgs.length; i++) {
+                    var img = imgs[i];
+                    var item = {
+                        src: img.src,
+                        w: img.naturalWidth,
+                        h: img.naturalHeight
+                    };
+                    items.push(item);
+                }
+            }
+            return items;
+        },
+
+    }
+</script>
+</body>
+</html>

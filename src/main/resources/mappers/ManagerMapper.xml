@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.hndt.dao.ManagerMapper">
+    <resultMap id="BaseResultMap" type="com.hndt.pojo.Manager">
+        <constructor>
+            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="icon" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="channel_id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="role_id" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, icon, channel_id, role_id, status
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select <include refid="Base_Column_List"/>
+        from manager
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from manager
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.hndt.pojo.Manager">
+        insert into manager (id, name, icon,channel_id, role_id, status)
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR},
+          #{channelId,jdbcType=BIGINT}, #{roleId,jdbcType=VARCHAR}, #{status, jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.hndt.pojo.Manager">
+        insert into manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="icon != null">
+                icon,
+            </if>
+            <if test="channelId != null">
+                channel_id,
+            </if>
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null">
+                #{channelId,jdbcType=BIGINT},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.hndt.pojo.Manager">
+        update manager
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null">
+                channel_id = #{channelId,jdbcType=BIGINT},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.hndt.pojo.Manager">
+        update manager
+        set name = #{name,jdbcType=VARCHAR},
+          icon = #{icon,jdbcType=VARCHAR},
+          channel_id = #{channelId,jdbcType=BIGINT},
+          role_id = #{roleId,jdbcType=VARCHAR},
+          status = #{status,jdbcType=INTEGER},
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryManagerListByParam" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from manager
+        <where>
+            <if test="content != null">
+                and name like '%${content}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByName" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from manager
+        where name = #{name}
+    </select>
+
+    <select id="selectByNameAndStatus" resultMap="BaseResultMap" parameterType="map">
+        select <include refid="Base_Column_List"/>
+        from manager
+        where name = #{name} and status = #{status}
+    </select>
+
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.hndt.dao.SendMapper">
+    <resultMap id="BaseResultMap" type="com.hndt.pojo.Send">
+        <constructor>
+            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="head_portrait" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="nick_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="name_no" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="area" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, head_portrait, nick_name, name_no, area
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from send
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from send
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.hndt.pojo.Send">
+        insert into send (id, name, head_portrait, nick_name, name_no, area)
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{headPortrait,jdbcType=VARCHAR},
+          #{nickName,jdbcType=VARCHAR}, #{nameNo,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.hndt.pojo.Send">
+        insert into send
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="headPortrait != null">
+                head_portrait,
+            </if>
+            <if test="nickName != null">
+                nick_name,
+            </if>
+            <if test="name_no != null">
+                name_no,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="headPortrait != null">
+                #{headPortrait,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="name_no != null">
+                #{nameNo,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.hndt.pojo.Send">
+        update send
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="headPortrait != null">
+                head_portrait = #{headPortrait,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="name_no != null">
+                name_no = #{nameNo,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.hndt.pojo.Send">
+        update send
+        set name = #{name,jdbcType=VARCHAR},
+          head_portrait = #{headPortrait,jdbcType=VARCHAR},
+          nick_name = #{nickName,jdbcType=VARCHAR},
+          name_no = #{nameNo,jdbcType=VARCHAR},
+          area = #{area,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

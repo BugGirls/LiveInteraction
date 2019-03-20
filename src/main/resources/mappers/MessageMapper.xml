@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hndt.dao.MessageMapper">
+    <resultMap id="BaseResultMap" type="com.hndt.pojo.Message">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+            <arg column="transaction_id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+            <arg column="source" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="file_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="channel_id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+            <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="add_msg" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="wave" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="total_duration" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="nickname" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="icon" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="from_uid" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="open_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="union_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="gender" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="city" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="country" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="province" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        </constructor>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, transaction_id, source, file_type, channel_id, content, add_msg, wave, total_duration, nickname,
+        icon, from_uid, open_id, union_id, gender, city, country, province, status, create_time,
+        update_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from message
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from message
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.hndt.pojo.Message" useGeneratedKeys="true" keyProperty="id">
+        insert into message (id, transaction_id, source, file_type,
+          channel_id, content, add_msg,
+          wave, total_duration, nickname,
+          icon, from_uid, open_id,
+          union_id, gender, city,
+          country, province, status,
+          create_time, update_time)
+        values (#{id,jdbcType=BIGINT}, #{transactionId,jdbcType=BIGINT}, #{source,jdbcType=VARCHAR}, #{fileType,jdbcType=VARCHAR},
+          #{channelId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{addMsg,jdbcType=VARCHAR},
+          #{wave,jdbcType=VARCHAR}, #{totalDuration,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR},
+          #{icon,jdbcType=VARCHAR}, #{fromUid,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR},
+          #{unionId,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR},
+          #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+          #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.hndt.pojo.Message">
+        insert into message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="transactionId != null">
+                transaction_id,
+            </if>
+            <if test="source != null">
+                source,
+            </if>
+            <if test="fileType != null">
+                file_type,
+            </if>
+            <if test="channelId != null">
+                channel_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="addMsg != null">
+                add_msg,
+            </if>
+            <if test="wave != null">
+                wave,
+            </if>
+            <if test="totalDuration != null">
+                total_duration,
+            </if>
+            <if test="nickname != null">
+                nickname,
+            </if>
+            <if test="icon != null">
+                icon,
+            </if>
+            <if test="fromUid != null">
+                from_uid,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="unionId != null">
+                union_id,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="country != null">
+                country,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="transactionId != null">
+                #{transactionId,jdbcType=BIGINT},
+            </if>
+            <if test="source != null">
+                #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="fileType != null">
+                #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null">
+                #{channelId,jdbcType=BIGINT},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="addMsg != null">
+                #{addMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="wave != null">
+                #{wave,jdbcType=VARCHAR},
+            </if>
+            <if test="totalDuration != null">
+                #{totalDuration,jdbcType=INTEGER},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="fromUid != null">
+                #{fromUid,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="unionId != null">
+                #{unionId,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null">
+                #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.hndt.pojo.Message">
+        update message
+        <set>
+            <if test="transactionId != null">
+                treasaction_id = #{transactionId,jdbcType=BIGINT},
+            </if>
+            <if test="source != null">
+                source = #{source,jdbcType=VARCHAR},
+            </if>
+            <if test="fileType != null">
+                file_type = #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null">
+                channel_id = #{channelId,jdbcType=BIGINT},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="addMsg != null">
+                add_msg = #{addMsg,jdbcType=VARCHAR},
+            </if>
+            <if test="wave != null">
+                wave = #{wave,jdbcType=VARCHAR},
+            </if>
+            <if test="totalDuration != null">
+                total_duration = #{totalDuration,jdbcType=INTEGER},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="fromUid != null">
+                from_uid = #{fromUid,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                open_id = #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="unionId != null">
+                union_id = #{unionId,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null">
+                country = #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.hndt.pojo.Message">
+        update message
+        set transaction_id = #{transactionId,jdbcType=BIGINT},
+          source = #{source,jdbcType=VARCHAR},
+          file_type = #{fileType,jdbcType=VARCHAR},
+          channel_id = #{channelId,jdbcType=BIGINT},
+          content = #{content,jdbcType=VARCHAR},
+          add_msg = #{addMsg,jdbcType=VARCHAR},
+          wave = #{wave,jdbcType=VARCHAR},
+          total_duration = #{totalDuration,jdbcType=INTEGER},
+          nickname = #{nickname,jdbcType=VARCHAR},
+          icon = #{icon,jdbcType=VARCHAR},
+          from_uid = #{fromUid,jdbcType=VARCHAR},
+          open_id = #{openId,jdbcType=VARCHAR},
+          union_id = #{unionId,jdbcType=VARCHAR},
+          gender = #{gender,jdbcType=INTEGER},
+          city = #{city,jdbcType=VARCHAR},
+          country = #{country,jdbcType=VARCHAR},
+          province = #{province,jdbcType=VARCHAR},
+          status = #{status,jdbcType=INTEGER},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryListByParam" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from message
+        <where>
+            <if test="content != null">
+               and content like '%${content}%'
+            </if>
+            <if test="source != null">
+                and source = #{source}
+            </if>
+            <if test="fileType != null">
+                and file_type = #{fileType}
+            </if>
+            and channel_id = #{channelId}
+        </where>
+        order by id desc
+    </select>
+
+    <delete id="batchDelete" parameterType="list">
+        delete
+        from message
+        where transaction_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="queryMessageByTransactionId" resultMap="BaseResultMap" parameterType="string">
+        select <include refid="Base_Column_List"/>
+        from message
+        where transaction_id = #{transactionId}
+    </select>
+
+    <delete id="deleteByTransactionId" parameterType="long">
+        delete from message
+        where transaction_id = #{transactionId}
+    </delete>
+
+    <update id="updateStatusByTransactionId" parameterType="map">
+        update message
+        set status = #{status}
+        where transaction_id = #{transactionId}
+    </update>
+
+    <update id="batchPublishMessage" parameterType="list">
+        update message
+        set status = 1
+        where transaction_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="totalMessage" resultType="int" parameterType="string">
+        select count(id)
+        from message
+        <where>
+            <if test="fileType != null">
+                and file_type = #{fileType}
+            </if>
+            <if test="source != null">
+                and source = #{source}
+            </if>
+            and channel_id = #{channelId}
+        </where>
+    </select>
+</mapper>

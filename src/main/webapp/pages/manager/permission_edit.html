@@ -1,0 +1,377 @@
+<!DOCTYPE html><html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>河南广播电视台-管理员</title>
+        <meta name="keywords" content="index">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <link rel="icon" type="image/png" href="assets/i/favicon.png">
+        <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+        <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <link rel="stylesheet" href="/static/css/amazeui.min.css" />
+        <link rel="stylesheet" href="/static/css/admin.css">
+        <link rel="stylesheet" href="/static/css/app.css">
+        <script src="/static/js/echarts.min.js"></script>
+    </head>
+
+    <body data-type="index">
+        <header class="am-topbar am-topbar-inverse admin-header">
+            <div class="am-topbar-brand">
+                <a href="javascript:;" class="tpl-logo">
+                    <img src="/static/img/logo.png" alt="">
+                </a>
+            </div>
+            <div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right"></div>
+
+            <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+            <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+                <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+                    <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                        <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                            <div id="weather"></div>
+                        </a>
+                        <ul class="am-dropdown-content tpl-dropdown-content">
+                            <li class="tpl-dropdown-content-external">
+                                <h3>当前城市 <span class="tpl-color-success" id="weatherCity"></span></h3>
+                            </li>
+                            <li class="tpl-dropdown-content-external">
+                                <div id="dayPicture"></div>
+                                <div id="temperature" style="padding-top: 20px;"></div>
+                                <div id="wind" style="padding-top: 10px;"></div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+
+                    <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                        <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                            <span class="tpl-header-list-user-ico"> <img id="loginIcon" src="/static/img/default.jpg"></span>
+                        </a>
+                        <ul class="am-dropdown-content">
+                            <li id="logout"><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="tpl-page-container tpl-page-header-fixed">
+
+            <div class="tpl-left-nav tpl-left-nav-hover">
+                <div class="tpl-left-nav-title">
+                    操作列表
+                </div>
+                <div class="tpl-left-nav-list">
+                    <ul class="tpl-left-nav-menu">
+                        <li class="tpl-left-nav-item">
+                            <a href="permission_list.html" class="nav-link active">
+                                <i class="am-icon-unlock-alt"></i>
+                                <span>权限</span>
+                            </a>
+                        </li>
+                        <li class="tpl-left-nav-item">
+                            <a href="role_list.html" class="nav-link tpl-left-nav-link-list">
+                                <i class="am-icon-gittip"></i>
+                                <span>角色</span>
+                            </a>
+                        </li>
+                        <li class="tpl-left-nav-item">
+                            <a href="manager_list.html" class="nav-link tpl-left-nav-link-list">
+                                <i class="am-icon-user"></i>
+                                <span>用户</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!--内容展示区-->
+            <div class="row">
+
+                <div class="am-u-md-12">
+                    <!--中间显示记录列表分页信息-->
+                    <div class="tpl-portlet">
+                        <div class="tpl-portlet-title">
+                            <div class="tpl-caption font-green ">
+                                <i class="am-icon-hacker-news"></i>
+                                <span id="manager_name"> 权限管理 - 添加权限</span>
+                            </div>
+                        </div>
+
+                        <div class="tpl-echarts">
+                            <div class="tpl-block">
+                                <div class="am-g">
+                                    <div class="am-u-sm-12">
+                                        <div class="tpl-echarts tpl-amazeui-form">
+                                            <form class="am-form am-form-horizontal">
+                                                <div class="am-form-group">
+                                                    <label class="am-form-label" for="permissionName">权限名称</label>
+                                                    <input type="text" class="" id="permissionName" placeholder="输入权限名称">
+                                                </div>
+                                                <div class="am-form-group">
+                                                    <label for="permissionUrl" class="am-form-label">URL</label>
+                                                    <textarea class="" rows="5" id="permissionUrl" placeholder="输入URL"></textarea>
+                                                </div>
+                                                <div class="am-form-group">
+                                                    <label class="am-form-label">启用</label>
+                                                    <div class="am-form-group">
+                                                        <label class="am-radio-inline">
+                                                            <input type="radio" value="0" name="docInlineRadio" checked> 是
+                                                        </label>
+                                                        <label class="am-radio-inline">
+                                                            <input type="radio" value="1" name="docInlineRadio"> 否
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="am-form-group">
+                                                    <button type="button" class="am-btn am-btn-secondary" id="permissionBtn">添加</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="http://www.jq22.com/jquery/jquery-2.1.1.js"></script>
+        <script src="/static/js/amazeui.min.js"></script>
+        <script>
+            var data = {
+                permissionId : getUrlParam('permissionId')
+            }
+
+            $(function() {
+                Init();
+            });
+            function Init() {
+                onLoad();
+                bindEvent();
+            }
+            function onLoad() {
+                // 开启/退出全屏
+                var $fullText = $('.admin-fullText');
+                $('#admin-fullscreen').on('click', function() {
+                    $.AMUI.fullscreen.toggle();
+                });
+                $(document).on($.AMUI.fullscreen.raw.fullscreenchange, function() {
+                    $fullText.text($.AMUI.fullscreen.isFullscreen ? '退出全屏' : '开启全屏');
+                });
+
+                getUserInfo();
+                // 加载天气信息
+                getCityWeather('郑州');
+
+                if (data.permissionId != null) {
+                    $('#manager_name').html('权限管理 - 修改权限');
+                    $('#permissionBtn').html('修改');
+
+                    $.ajax({
+                        url : '/permission/detail.do',
+                        data : {
+                            permissionId : data.permissionId
+                        },
+                        type : 'POST',
+                        dataType : 'json',
+                        success : function(res) {
+                            if (res.status === 0) {
+                                var permissionData = res.data;
+
+                                $('#permissionName').val(permissionData.name);
+                                $('#permissionUrl').val(permissionData.url);
+                                $("input:radio[name='docInlineRadio'][value="+ permissionData.status + "]").attr('checked', true);
+                            } else if (res.status == 10) {// 需要登录
+                                window.location.href = 'http://uc.hndt.com/login.xhtml';
+                            } else {
+                                alert(res.msg);
+                            }
+                        },
+                        error : function(err) {
+                            alert('好像哪里不对了')
+                        }
+                    });
+                }
+            }
+            function getUserInfo() {
+                $.ajax({
+                    url : '/manager/get_user_info.do',
+                    type : 'POST',
+                    dataType : 'json',
+                    contentType : false,
+                    processData : false,
+                    cache : false,
+                    success: function(res) {
+                        console.log(res)
+                        if (res.status === 0) {
+                            var icon = res.data.icon;
+                            if (icon === null || icon === 'undefined' || icon === '') {
+                                $('#loginIcon').attr('src', '/static/img/default.jpg');
+                            } else {
+                                $('#loginIcon').attr('src', res.data.icon);
+                            }
+                        } else if (res.status == 10) {// 需要登录
+                            window.location.href = 'http://uc.hndt.com/login.xhtml';
+                        } else {
+                            alert(res.msg);
+                        }
+                    },
+                    error : function(errMsg) {
+                        alert('好像哪里不对了');
+                    }
+                });
+            }
+            function bindEvent() {
+                // 头部导航隐藏菜单
+                $('.tpl-header-nav-hover-ico').on('click', function() {
+                    $('.tpl-left-nav').toggle();
+                    $('.tpl-content-wrapper').toggleClass('tpl-content-wrapper-hover');
+                });
+                // 添加/修改按钮的点击事件
+                $('#permissionBtn').click(function() {
+                    var receiverInfo = getReceiverInfo();
+                    if (receiverInfo.status) {
+                        var url = '';
+                        var title = '';
+                        if (data.permissionId) {
+                            url = '/permission/update.do';
+                            title = '修改';
+                        } else {
+                            url = '/permission/insert.do';
+                            title = '添加';
+                        }
+
+                        $.ajax({
+                            url : url,
+                            data : receiverInfo.permission,
+                            type : 'POST',
+                            dataType : 'json',
+                            success : function(res) {
+                                if (res.status === 0) {
+                                    alert('权限' + title + '成功');
+                                    window.location.href = '/pages/manager/permission_list.html';
+                                } else if (res.status == 10) {// 需要登录
+                                    window.location.href = 'http://uc.hndt.com/login.xhtml';
+                                } else {
+                                    alert(res.msg);
+                                }
+                            },
+                            error : function(err) {
+                                alert('好像哪里不对了')
+                            }
+                        });
+                    } else {
+                        alert(receiverInfo.msg);
+                    }
+                });
+                // 退出登录
+                $('#logout').click(function() {
+                    $.ajax({
+                        url : '/manager/log_out.do',
+                        type : 'POST',
+                        dataType : 'json',
+                        success : function(res) {
+                            if (res.status == 0) {
+                                window.location.href = 'http://uc.hndt.com/login.xhtml';
+                            } else if (res.status == 10) {
+                                window.location.href = 'http://uc.hndt.com/login.xhtml';
+                            } else {
+                                alert(res.msg);
+                            }
+                        },
+                        error : function(err) {
+                            progress.done();
+                            alert('好像哪里不对了')
+                        }
+                    });
+                });
+            }
+            // 获取表单参数并校验
+            function getReceiverInfo() {
+                var receiverInfo = {};
+                var result = {
+                    status : false,
+                    msg : ''
+                };
+
+                receiverInfo.name = $.trim($('#permissionName').val());
+                receiverInfo.url = $.trim($('#permissionUrl').val());
+                receiverInfo.status = $("input[name='docInlineRadio']:checked").val();
+                receiverInfo.id = data.permissionId;
+
+                if (!validate(receiverInfo.name, 'require')) {
+                    result.msg = '请输入权限名称';
+                    return result;
+                } else if (!validate(receiverInfo.url, 'require')) {
+                    result.msg = '请输入URL';
+                    return result;
+                }
+                result.status = true;
+                result.msg = '验证通过';
+                result.permission = receiverInfo;
+
+                return result;
+            }
+            // 参数验证方法
+            function validate(value, type) {
+                var value = $.trim(value);
+                // 非空验证
+                if ('require' === type) {
+                    return !!value;// 如果value为空则返回false，否则返回true
+                }
+            }
+            function getUrlParam(name){
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) {
+                    return unescape(r[2]);
+                }
+                return null;
+            }
+            // 获取城市天气
+            function getCityWeather(cityName) {
+                $.ajax({
+                    url:"http://api.map.baidu.com/telematics/v3/weather",
+                    type:"get",
+                    data:{
+                        location:cityName,
+                        output:'json',
+                        ak:'6tYzTvGZSOpYB5Oc2YGGOKt8'
+                    },
+                    /*预期服务器端返回的数据类型，假设我现在跨域了，我就改成jsonp 就可以了 */
+                    dataType:"jsonp",
+                    success:function(data){
+                        // 百度那边的 数据已经回来，我现在要解析这个数据.
+                        var weatherData = data.results[0].weather_data;
+
+                        // 百度会返回给我们后四天的天气数据，只获取第一条数据，即当天的天气数据
+                        var showTitle = weatherData[0];
+
+                        // 填充顶部天气信息
+                        var titleWeather = '';
+                        titleWeather += '<span>' + showTitle.date + '</span>';
+                        titleWeather += '<span style="margin-left: 15px;">' + showTitle.weather + '</span>';
+                        $('#weather').html(titleWeather);
+
+                        // 设置卡片天气详细信息
+                        $('#weatherCity').html(cityName);
+                        var dayUrl = '';
+                        dayUrl += '<div>白天：<img src=' + showTitle.dayPictureUrl + '></div><br/>';
+                        dayUrl += '<div>夜晚：<img src=' + showTitle.nightPictureUrl + '></div>';
+                        $('#dayPicture').html(dayUrl);
+                        $('#temperature').html(showTitle.temperature);
+                        $('#wind').html(showTitle.weather + " " + showTitle.wind);
+                    }
+                });
+            }
+        </script>
+    </body>
+
+</html>

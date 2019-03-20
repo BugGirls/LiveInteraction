@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="LiveInteraction:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="LiveInteraction.war">
+      <element id="artifact" artifact-name="LiveInteraction:war exploded" />
+    </root>
+  </artifact>
+</component>
